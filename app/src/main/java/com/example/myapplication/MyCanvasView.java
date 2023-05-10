@@ -22,6 +22,9 @@ public class MyCanvasView extends View {
     private Canvas extraCanvas;
     private Bitmap extraBitmap;
     private Rect frame;
+    private float lastX,lastY;
+    private static final float TOUCH_TOLERANCE = 4;
+
 
 
 
@@ -82,5 +85,25 @@ public class MyCanvasView extends View {
                 break;
         }
         return true;
+    }
+
+    private void touchUp() {
+        path.reset();
+    }
+
+    private void touchMove(float x, float y) {
+        float dx = Math.abs(x-lastX);
+        float dy = Math.abs(y-lastY);
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE){
+            path.quadTo(lastX, lastY, (x+lastX)/2, (y+lastY)/2);
+            lastX = x;
+            lastY = y;
+            extraCanvas.drawPath(path, paint);
+        }
+    }
+
+    private void touchStart(float x, float y) {
+        path.moveTo(x,y);
+        lastX = x; lastY = y;
     }
 }
