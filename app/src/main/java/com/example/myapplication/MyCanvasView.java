@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -62,5 +63,24 @@ public class MyCanvasView extends View {
         super.onDraw(canvas);
         canvas.drawBitmap(extraBitmap, 0,0 , null);
         canvas.drawRect(frame, paint);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                touchStart(x,y);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                touchMove(x,y);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+                touchUp();
+                break;
+        }
+        return true;
     }
 }
